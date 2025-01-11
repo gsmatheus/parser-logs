@@ -1,24 +1,45 @@
-def contar_pontos(url_completa):
-    return url_completa.count(':')
+import os
+from utils import extrair_dados, contar_pontos
 
-def extrair_dados(url_completa):
-    dados_invertidos = url_completa[::-1]
-    partes = dados_invertidos.split(':', 3)
-    
-    senha = partes[0]
-    email = partes[1]
-    url = partes[2:]
-    
-    return {
-        'senha': senha[::-1],
-        'email': email[::-1],
-        'url': ':'.join(url)[::-1]
-    }
+def listar_arquivos_txt():
+    arquivos = [f for f in os.listdir('.') if f.endswith('.txt')]
+    return arquivos
 
-url_entrada = "https://sistema.sismix.com.br:8080/cadastro:luizfelipesoaresdm@outlook.com:Zfa#5+livre"
-resultado = extrair_dados(url_entrada)
+def exibir_menu():
+    while True:
+        arquivos = listar_arquivos_txt()
+        print("\n=== Menu de Arquivos TXT ===")
+        
+        if not arquivos:
+            print("Nenhum arquivo .txt encontrado na pasta!")
+            return
+        
+        for i, arquivo in enumerate(arquivos, 1):
+            print(f"{i}. {arquivo}")
+        
+        print("0. Sair")
+        
+        try:
+            escolha = int(input("\nEscolha um arquivo (0 para sair): "))
+            
+            if escolha == 0:
+                break
+            elif 1 <= escolha <= len(arquivos):
+                arquivo_selecionado = arquivos[escolha - 1]
+                print(arquivo_selecionado)
+                percorrer_arquivo(arquivo_selecionado)
+            else:
+                print("\nOpção inválida!")
+        except ValueError:
+            print("\nPor favor, digite um número válido!")
 
-print(resultado['senha'])
-print(resultado['email'])
-print(resultado['url'])
-print(contar_pontos(url_entrada))
+def percorrer_arquivo(arquivo):
+    with open(arquivo, 'r') as file:
+        for linha in file:
+            linha = linha.strip()
+            
+            dados = extrair_dados(linha)
+            print(dados)
+
+if __name__ == "__main__":
+    exibir_menu()
