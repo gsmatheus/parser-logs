@@ -1,9 +1,12 @@
 from pathlib import Path
+import json
 from typing import List, Optional
 from dataclasses import dataclass
-from utils import extrair_dados, contar_pontos
+from utils import extrair_dados, processar_linhas
 
 ##estou sentindo uma vibe estranha
+# moio <3 alan
+
 
 @dataclass
 class ArquivoTXT:
@@ -27,6 +30,22 @@ class ProcessadorArquivos:
                     if linha:
                         dados = extrair_dados(linha)
                         print(dados)
+            arquivo_unicas = arquivo.caminho.stem + '_Unicas.txt'
+            
+            processar_linhas(arquivo.caminho, arquivo_unicas)
+            
+            dados_processados = []
+            with open(arquivo_unicas, 'r', encoding='utf-8') as file:
+                for linha in file:
+                    dados = extrair_dados(linha.strip())
+                    dados_processados.append(dados)
+            
+            nome_arquivo_json = arquivo.caminho.stem + '_Formatado.json'
+            with open(nome_arquivo_json, 'w', encoding='utf-8') as f_json:
+                json.dump(dados_processados, f_json, ensure_ascii=False, indent=4)
+
+            print(f"Arquivos salvos: {arquivo_unicas}, {nome_arquivo_json}")
+
         except Exception as e:
             print(f'Erro ao processar arquivo {arquivo.nome}: {str(e)}')
 
@@ -83,3 +102,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
