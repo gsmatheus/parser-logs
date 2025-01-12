@@ -3,6 +3,8 @@ from typing import List, Optional
 from dataclasses import dataclass
 from utils import extrair_dados, contar_pontos
 
+##estou sentindo uma vibe estranha
+
 @dataclass
 class ArquivoTXT:
     nome: str
