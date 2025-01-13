@@ -1,5 +1,11 @@
 import hashlib
 
+GREEN = '\033[92m'
+RED = '\033[91m'
+BLUE = '\033[94m'
+RESET = '\033[0m'
+BOLD = '\033[1m'
+
 def contar_pontos(url_completa):
     return url_completa.count(':')
 
@@ -17,12 +23,21 @@ def extrair_dados(url_completa):
         'url': ':'.join(url)[::-1]
     }
 
+def sucesso(mensagem):
+    print(f"{GREEN}{BOLD}{mensagem}{RESET}")
+
+def info(mensagem):
+    print(f"{BLUE}{BOLD}{mensagem}{RESET}")
+
+def erro(mensagem):
+    print(f"{RED}{BOLD}{mensagem}{RESET}")
+
 hashes = []
 todos = []
 docs = []
 
 def gera_hash(line):
-    return hashlib.sha256(line.encode()).hexdigest()
+    return hashlib.md5(line.encode()).hexdigest()
 
 def verifica_hash(hash):
     return hash in hashes
