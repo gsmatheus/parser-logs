@@ -1,3 +1,5 @@
+import time
+
 from pymongo import MongoClient
 from typing import List, Dict, Any
 from datetime import datetime
@@ -20,6 +22,7 @@ class MongoDBManager:
     def inserir_dados(self, dados: List[Dict[str, Any]]) -> None:
         documentos = []
         try:
+            start_time = time.time()
             for dado in dados:
                 documento = {
                     "url": dado['url'],
@@ -31,6 +34,9 @@ class MongoDBManager:
         
             if documentos:
                 self.collection.insert_many(documentos, ordered=False)
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            info(f"Tempo de inserção: {elapsed_time:.2f} segundos")
         except Exception as e:
             if "E11000 duplicate key error" in str(e):
                 return
